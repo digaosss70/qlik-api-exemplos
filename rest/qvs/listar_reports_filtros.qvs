@@ -1,0 +1,156 @@
+///$tab Listar reports filtros
+let vMinhaConexao = 'NOME_SPACO:NOME_CONEXAO';
+let vMeuHost = 'meu-host.us.qlikcloud.com';
+let vApp  = 'fdsf5d4f-dsad-dasda-adsdas-dsadaasdasd';
+
+LIB CONNECT TO '$(vMinhaConexao)';
+
+
+let vpage = 0;
+
+
+
+
+baseidFiltro: Load Null() as idFiltro AutoGenerate(1);
+
+
+DO
+LET vnext = 'https://$(vMeuHost)/api/v1/apps/$(vApp)/report-filters?filterTypes=REP&limit=100&page=$(vpage)';
+
+
+  RestConnectorMasterTable:
+  Load *, 1 as flag;
+  SQL SELECT 
+      "__KEY_root",
+      (SELECT 
+          "createdAt",
+          "description",
+          "filterType",
+          "filterVersion",
+          "id",
+          "name" AS "name_u0",
+          "ownerId",
+          "updatedAt",
+          "__KEY_data",
+          "__FK_data",
+          (SELECT 
+              "variables",
+              "__KEY_filterV1_0",
+              "__FK_filterV1_0",
+              (SELECT 
+                  "__KEY_fieldsByState",
+                  "__FK_fieldsByState",
+                  (SELECT 
+                      "name",
+                      "__KEY_$",
+                      "__FK_$",
+                      (SELECT 
+                          "valueAsText",
+                          "valueType",
+                          "__FK_values"
+                      FROM "values" FK "__FK_values")
+                  FROM "$" PK "__KEY_$" FK "__FK_$")
+              FROM "fieldsByState" PK "__KEY_fieldsByState" FK "__FK_fieldsByState")
+          FROM "filterV1_0" PK "__KEY_filterV1_0" FK "__FK_filterV1_0")
+      FROM "data" PK "__KEY_data" FK "__FK_data"),
+      (SELECT 
+          "__KEY_links",
+          "__FK_links",
+          (SELECT 
+              "href",
+              "__FK_next"
+          FROM "next" FK "__FK_next")
+      FROM "links" PK "__KEY_links" FK "__FK_links")
+  FROM JSON (wrap on) "root" PK "__KEY_root"
+  WITH CONNECTION(
+  Url "$(vnext)"
+  )
+  ;
+
+
+
+
+  [values]:
+  LOAD	
+  	[valueAsText],
+      [valueType],
+      '$(vpage)|'&[__FK_values] AS [__KEY_$]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_values]);
+  
+    [values_map]:
+    Mapping
+  LOAD	
+        '$(vpage)|'&[__FK_values] AS [__KEY_$],
+  	[valueAsText]
+
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_values]);
+
+
+  [$]:
+  LOAD	[name] as campo_filtro,
+  [name]&'|'&ApplyMap('values_map','$(vpage)|'&[__KEY_$],Null()) as key_filter,
+  ApplyMap('values_map','$(vpage)|'&[__KEY_$],Null()) as valor_filtro,
+      '$(vpage)|'&[__KEY_$] as [__KEY_$],
+      '$(vpage)|'&[__FK_$] AS [__KEY_fieldsByState]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_$]);
+
+
+  [fieldsByState]:
+  LOAD	'$(vpage)|'&[__KEY_fieldsByState] as [__KEY_fieldsByState],
+      '$(vpage)|'&[__FK_fieldsByState] AS [__KEY_filterV1_0]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_fieldsByState]);
+
+
+  [filterV1_0]:
+  LOAD	[variables],
+      '$(vpage)|'&[__KEY_filterV1_0] as [__KEY_filterV1_0],
+      '$(vpage)|'&[__FK_filterV1_0] AS [__KEY_data_filter]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_filterV1_0]);
+
+  verifica_atual:
+  Load id as qtd_verifica_atual
+  RESIDENT RestConnectorMasterTable
+  WHERE 
+  NOT IsNull([__FK_data])
+  and 
+  not Exists(idFiltro,id)
+  ;
+
+
+  [data]:
+  LOAD	
+      $(vDataHora([createdAt])) as createdAt,
+      [description] as description_filter,
+      [filterType],
+      [filterVersion],
+      [id] as idFiltro,
+      [name_u0] AS [nome filtro],
+      name_u0 as userFilter,
+      [ownerId],
+      $(vDataHora([updatedAt])) as updatedAt,
+      '$(vpage)|'&[__KEY_data] as [__KEY_data_filter],
+      '$(vpage)|'&[__FK_data] AS [__KEY_root]
+  RESIDENT RestConnectorMasterTable
+  WHERE 1 = 1
+  and NOT IsNull([__FK_data])
+  ;
+  DROP TABLE RestConnectorMasterTable;
+
+
+
+  let vQtdAtual = NoOfRows('verifica_atual');
+  drop Table verifica_atual;
+
+  if vQtdAtual > 0 then
+      let vpage = vpage+1;
+  end if
+
+
+Loop while vQtdAtual > 0;
+
+drop Table baseidFiltro;

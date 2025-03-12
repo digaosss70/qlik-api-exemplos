@@ -1,0 +1,723 @@
+///$tab Listar reports filtro app
+let vMinhaConexao = 'NOME_SPACO:NOME_CONEXAO';
+let vMeuHost = 'meu-host.us.qlikcloud.com';
+let vApp  = 'aed4dfad-bff0-43ff-124f-3cfe4f8f794c';
+
+
+Set ErrorMode = 0;
+
+LIB CONNECT TO '$(vMinhaConexao)';
+LET vnext = 'https://$(vMeuHost)/api/v1/sharing-tasks?appid=$(vApp)';
+let vcont = 1;
+
+
+DO
+Trace $(vnext);
+
+RestConnectorMasterTable:
+SQL SELECT 
+	"currentPageCount",
+	"totalCount",
+	"__KEY_root",
+	(SELECT 
+		"__KEY_links",
+		"__FK_links",
+		(SELECT 
+			"href",
+			"__FK_next"
+		FROM "next" FK "__FK_next"),
+		(SELECT 
+			"href" AS "href_u0",
+			"__FK_self"
+		FROM "self" FK "__FK_self")
+	FROM "links" PK "__KEY_links" FK "__FK_links"),
+	(SELECT 
+		"appId" AS "appId_u2",
+		"appName",
+		"createdBy",
+		"dateCreated",
+		"emailContent",
+		"enabledBySystem" AS "enabledBySystem_u0",
+		"id" AS "id_u0",
+		"lastExecutionDate",
+		"lastRun",
+		"lastUpdated",
+		"name" AS "name_u2",
+		"owner",
+		"ownerName",
+		"startTime",
+		"statusCode",
+		"subType" AS "subType_u0",
+		"tenant",
+        "traceid",
+		"type" AS "type_u0",
+		"updatedBy",
+		"latestExecutionFilesURL",
+		"latestExecutionURL",
+		"enabledByUser" AS "enabledByUser_u0",
+		"insightDirectURL",
+		"insightFallbackURL",
+		"insightID" AS "insightID_u0",
+		"multiInsightURLs",
+		"description",
+		"enabled" AS "enabled_u0",
+		"distributionListId",
+		"failedExecutionsCount",
+		"spaceId",
+		"templateId" AS "templateId_u0",
+		"__KEY_sharingTasks",
+		"__FK_sharingTasks",
+		(SELECT 
+			"directURL",
+			"fallbackURL",
+			"insightID",
+			"resourceID",
+			"status",
+			"__FK_multiInsightURLs"
+		FROM "multiInsightURLs" FK "__FK_multiInsightURLs"),
+		(SELECT 
+			"DLGroups",
+			"DLUsers",
+			"emailAddresses",
+			"groupIds",
+			"__KEY_recipients",
+			"__FK_recipients",
+			(SELECT 
+				"enabledBySystem",
+				"enabledByUser",
+				"groups",
+				"subscribed",
+				"value" AS "value_u0",
+				"__KEY_userIds",
+				"__FK_userIds",
+				(SELECT 
+					"@Value",
+					"__FK_alertingTaskRecipientErrors"
+				FROM "alertingTaskRecipientErrors" FK "__FK_alertingTaskRecipientErrors" ArrayValueAlias "@Value"),
+				(SELECT 
+					"timestamp",
+					"value",
+					"__FK_taskRecipientErrors"
+				FROM "taskRecipientErrors" FK "__FK_taskRecipientErrors")
+			FROM "userIds" PK "__KEY_userIds" FK "__FK_userIds"),
+			(SELECT 
+				"taskRecipientErrors",
+				"value" AS "value_u1",
+				"__FK_emailAddresses"
+			FROM "emailAddresses" FK "__FK_emailAddresses"),
+			(SELECT 
+				"enabled",
+				"filters",
+				"membersCount",
+				"name",
+				"taskGroupRecipientErrors",
+				"__FK_DLGroups"
+			FROM "DLGroups" FK "__FK_DLGroups"),
+			(SELECT 
+				"@Value" AS "@Value_u0",
+				"__FK_DLUsers"
+			FROM "DLUsers" FK "__FK_DLUsers" ArrayValueAlias "@Value_u0")
+		FROM "recipients" PK "__KEY_recipients" FK "__FK_recipients"),
+		(SELECT 
+			"historySize",
+			"overrideInterval",
+			"__FK_retentionPolicy"
+		FROM "retentionPolicy" FK "__FK_retentionPolicy"),
+		(SELECT 
+			"chronosJobID",
+			"endDateTime",
+			"lastExecutionTime",
+			"nextExecutionTime",
+			"startDateTime",
+			"timezone",
+			"__KEY_scheduleOptions",
+			"__FK_scheduleOptions",
+			(SELECT 
+				"@Value" AS "@Value_u1",
+				"__FK_recurrence"
+			FROM "recurrence" FK "__FK_recurrence" ArrayValueAlias "@Value_u1")
+		FROM "scheduleOptions" PK "__KEY_scheduleOptions" FK "__FK_scheduleOptions"),
+		(SELECT 
+			"fields",
+			"queryItems",
+			"__KEY_state",
+			"__FK_state",
+			(SELECT 
+				"displayName",
+				"isNumeric",
+				"name" AS "name_u0",
+				"stateName",
+				"__KEY_selections",
+				"__FK_selections",
+				(SELECT 
+					"@Value" AS "@Value_u2",
+					"__FK_displayValues"
+				FROM "displayValues" FK "__FK_displayValues" ArrayValueAlias "@Value_u2"),
+				(SELECT 
+					"@Value" AS "@Value_u3",
+					"__FK_values"
+				FROM "values" FK "__FK_values" ArrayValueAlias "@Value_u3")
+			FROM "selections" PK "__KEY_selections" FK "__FK_selections")
+		FROM "state" PK "__KEY_state" FK "__FK_state"),
+		(SELECT 
+			"@Value" AS "@Value_u4",
+			"__FK_tags"
+		FROM "tags" FK "__FK_tags" ArrayValueAlias "@Value_u4"),
+		(SELECT 
+			"timestamp" AS "timestamp_u0",
+			"value" AS "value_u2",
+			"__FK_taskErrors"
+		FROM "taskErrors" FK "__FK_taskErrors"),
+		(SELECT 
+			"excelData",
+			"subType",
+			"type",
+			"multiSheetData",
+			"fileName",
+			"fileTimeStamp",
+			"__KEY_templates",
+			"__FK_templates",
+			(SELECT 
+				"appId",
+				"groupStates",
+				"heightPx",
+				"resizeType",
+				"sheetId",
+				"widthPx",
+				"__KEY_multiSheetData",
+				"__FK_multiSheetData",
+				(SELECT 
+					"deviceType",
+					"language",
+					"theme",
+					"__KEY_jsOpts",
+					"__FK_jsOpts",
+					(SELECT 
+						"qName",
+						"qNum",
+						"qText",
+						"__FK_variables"
+					FROM "variables" FK "__FK_variables")
+				FROM "jsOpts" PK "__KEY_jsOpts" FK "__FK_jsOpts")
+			FROM "multiSheetData" PK "__KEY_multiSheetData" FK "__FK_multiSheetData"),
+			(SELECT 
+				"appId" AS "appId_u0",
+				"groupStates" AS "groupStates_u0",
+				"heightPx" AS "heightPx_u0",
+				"objectId",
+				"outDpi",
+				"outZoom",
+				"sheetId" AS "sheetId_u0",
+				"widthPx" AS "widthPx_u0",
+				"__KEY_chartData",
+				"__FK_chartData",
+				(SELECT 
+					"deviceType" AS "deviceType_u0",
+					"language" AS "language_u0",
+					"theme" AS "theme_u0",
+					"__KEY_jsOpts_u0",
+					"__FK_jsOpts_u0",
+					(SELECT 
+						"qName" AS "qName_u0",
+						"qNum" AS "qNum_u0",
+						"qText" AS "qText_u0",
+						"__FK_variables_u0"
+					FROM "variables" FK "__FK_variables_u0")
+				FROM "jsOpts" PK "__KEY_jsOpts_u0" FK "__FK_jsOpts_u0"),
+				(SELECT 
+					"qOp",
+					"qPath",
+					"qValue",
+					"__FK_patches"
+				FROM "patches" FK "__FK_patches")
+			FROM "chartData" PK "__KEY_chartData" FK "__FK_chartData"),
+			(SELECT 
+				"appId" AS "appId_u1",
+				"name" AS "name_u1",
+				"selectionType",
+				"templateId",
+				"__KEY_excelData",
+				"__FK_excelData",
+				(SELECT 
+					"id",
+					"__FK_persistentBookmark"
+				FROM "persistentBookmark" FK "__FK_persistentBookmark")
+			FROM "excelData" PK "__KEY_excelData" FK "__FK_excelData")
+		FROM "templates" PK "__KEY_templates" FK "__FK_templates"),
+		(SELECT 
+			"@Value" AS "@Value_u5",
+			"__FK_transportChannels"
+		FROM "transportChannels" FK "__FK_transportChannels" ArrayValueAlias "@Value_u5"),
+		(SELECT 
+			"__KEY_links_u0",
+			"__FK_links_u0",
+			(SELECT 
+				"href" AS "href_u1",
+				"__FK_self_u0"
+			FROM "self" FK "__FK_self_u0")
+		FROM "links" PK "__KEY_links_u0" FK "__FK_links_u0"),
+		(SELECT 
+			"@Value" AS "@Value_u6",
+			"__FK_selectionErrors"
+		FROM "selectionErrors" FK "__FK_selectionErrors" ArrayValueAlias "@Value_u6"),
+		(SELECT 
+			"body",
+			"subject",
+			"__FK_emailContent"
+		FROM "emailContent" FK "__FK_emailContent"),
+		(SELECT 
+			"chronosJobID" AS "chronosJobID_u0",
+			"executeOnAppReload",
+			"recurrence",
+			"__KEY_trigger",
+			"__FK_trigger",
+			(SELECT 
+				"@Value" AS "@Value_u7",
+				"__FK_recurrence_u0"
+			FROM "recurrence" FK "__FK_recurrence_u0" ArrayValueAlias "@Value_u7")
+		FROM "trigger" PK "__KEY_trigger" FK "__FK_trigger")
+	FROM "sharingTasks" PK "__KEY_sharingTasks" FK "__FK_sharingTasks")
+FROM JSON (wrap on) "root" PK "__KEY_root"
+WITH CONNECTION(
+Url "$(vnext)"
+)
+;
+
+if NoOfRows('RestConnectorMasterTable') > 0  then
+
+
+
+[next]:
+LOAD	
+	[href],
+	[__FK_next] AS [__KEY_links]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_next]);
+
+
+[self]:
+LOAD	[href_u0] AS [href_u0],
+	[__FK_self] AS [__KEY_links]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_self]);
+
+
+[links]:
+LOAD	
+	[__KEY_links],
+	[__FK_links] AS [__KEY_root]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_links]);
+
+
+[multiInsightURLs]:
+LOAD	
+	[directURL],
+	[fallbackURL],
+	[insightID],
+	[resourceID],
+	[status],
+	'$(vcont)|'&[__FK_multiInsightURLs] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_multiInsightURLs]);
+
+
+[alertingTaskRecipientErrors]:
+LOAD	
+	[@Value],
+	'$(vcont)|'&[__FK_alertingTaskRecipientErrors] AS [__KEY_userIds]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_alertingTaskRecipientErrors]);
+
+
+[taskRecipientErrors]:
+LOAD	
+	$(vDataHora([timestamp])) as [timestamp],
+	[value],
+	'$(vcont)|'&[__FK_taskRecipientErrors] AS [__KEY_userIds]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_taskRecipientErrors]);
+
+
+[userIds]:
+LOAD	
+	[enabledBySystem],
+	[enabledByUser],
+	[groups],
+	[subscribed],
+	[value_u0] AS [value_u0],
+	'$(vcont)|'&[__KEY_userIds] as [__KEY_userIds],
+	'$(vcont)|'&[__FK_userIds] AS [__KEY_recipients]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_userIds]);
+
+
+[emailAddresses]:
+LOAD	
+	[taskRecipientErrors],
+	[value_u1] AS [value_u1],
+	'$(vcont)|'&[__FK_emailAddresses] AS [__KEY_recipients]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_emailAddresses]);
+
+
+[DLGroups]:
+LOAD	
+	[enabled],
+	[filters],
+	[membersCount],
+	[name],
+	[taskGroupRecipientErrors],
+	'$(vcont)|'&[__FK_DLGroups] AS [__KEY_recipients]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_DLGroups]);
+
+
+[DLUsers]:
+LOAD	
+	[@Value_u0] AS [@Value_u0],
+	'$(vcont)|'&[__FK_DLUsers] AS [__KEY_recipients]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_DLUsers]);
+
+
+[recipients]:
+LOAD	
+	[DLGroups],
+	[DLUsers],
+	[emailAddresses],
+	[groupIds],
+	'$(vcont)|'&[__KEY_recipients] as [__KEY_recipients],
+	'$(vcont)|'&[__FK_recipients] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_recipients]);
+
+
+[retentionPolicy]:
+LOAD	
+	[historySize],
+	[overrideInterval],
+	'$(vcont)|'&[__FK_retentionPolicy] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_retentionPolicy]);
+
+
+[recurrence]:
+LOAD	
+	[@Value_u1] AS [@Value_u1],
+    //recurrence
+    time(MakeTime(TextBetween([@Value_u1],';BYHOUR=',';BYMINUTE='),TextBetween([@Value_u1],';BYMINUTE=',';BYSECOND='))) as time_send,
+    //TextBetween([@Value_u1],';BYHOUR=',';BYMINUTE=') as hour,
+    //TextBetween([@Value_u1],';BYMINUTE=',';BYSECOND=') as minute,
+	'$(vcont)|'&[__FK_recurrence] AS [__KEY_scheduleOptions]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_recurrence]);
+
+
+
+
+[scheduleOptions]:
+LOAD	
+	[chronosJobID],
+	$(vDataHora([endDateTime])) as [endDateTime],
+	$(vDataHora([lastExecutionTime])) as [lastExecutionTime],
+	$(vDataHora([nextExecutionTime])) as [nextExecutionTime],
+	$(vDataHora([startDateTime])) as [startDateTime],
+	[timezone],
+	'$(vcont)|'&[__KEY_scheduleOptions] as [__KEY_scheduleOptions],
+	'$(vcont)|'&[__FK_scheduleOptions] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_scheduleOptions]);
+
+
+[displayValues]:
+LOAD	[@Value_u2] AS [@Value_u2],
+	'$(vcont)|'&[__FK_displayValues] AS [__KEY_selections]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_displayValues]);
+
+
+[values]:
+LOAD	[@Value_u3] AS [@Value_u3],
+	'$(vcont)|'&[__FK_values] AS [__KEY_selections]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_values]);
+
+
+[selections]:
+LOAD	
+	[displayName],
+	[isNumeric],
+	[name_u0] AS [name_u0],
+	[stateName],
+	'$(vcont)|'&[__KEY_selections] as [__KEY_selections],
+	'$(vcont)|'&[__FK_selections] AS [__KEY_state]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_selections]);
+
+
+[state]:
+LOAD	[fields],
+	[queryItems],
+	'$(vcont)|'&[__KEY_state] as [__KEY_state],
+	'$(vcont)|'&[__FK_state] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_state]);
+
+
+[tags]:
+LOAD	[@Value_u4] AS [@Value_u4],
+	'$(vcont)|'&[__FK_tags] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_tags]);
+
+
+[taskErrors]:
+LOAD	$(vDataHora([timestamp_u0])) AS [timestamp_u0],
+	IF(LEN(TRIM([value_u2]))=0,'OK',[value_u2]) AS [value_u2],
+	'$(vcont)|'&[__FK_taskErrors] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_taskErrors]);
+
+
+[variables]:
+LOAD	[qName],
+	[qNum],
+	[qText],
+	'$(vcont)|'&[__FK_variables] AS [__KEY_jsOpts]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_variables]);
+
+
+[jsOpts]:
+LOAD	[deviceType],
+	[language],
+	[theme],
+	'$(vcont)|'&[__KEY_jsOpts] as [__KEY_jsOpts],
+	'$(vcont)|'&[__FK_jsOpts] AS [__KEY_multiSheetData]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_jsOpts]);
+
+
+[multiSheetData]:
+LOAD	
+	[appId],
+	[groupStates],
+	[heightPx],
+	[resizeType],
+	[sheetId],
+	[widthPx],
+	'$(vcont)|'&[__KEY_multiSheetData] as [__KEY_multiSheetData],
+	'$(vcont)|'&[__FK_multiSheetData] AS [__KEY_templates]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_multiSheetData]);
+
+
+[variables_u0]:
+LOAD	
+	[qName_u0] AS [qName_u0],
+	[qNum_u0] AS [qNum_u0],
+	[qText_u0] AS [qText_u0],
+	'$(vcont)|'&[__FK_variables_u0] AS [__KEY_jsOpts_u0]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_variables_u0]);
+
+
+[jsOpts_u0]:
+LOAD	[deviceType_u0] AS [deviceType_u0],
+	[language_u0] AS [language_u0],
+	[theme_u0] AS [theme_u0],
+	'$(vcont)|'&[__KEY_jsOpts_u0] as [__KEY_jsOpts_u0],
+	'$(vcont)|'&[__FK_jsOpts_u0] AS [__KEY_chartData]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_jsOpts_u0]);
+
+
+[patches]:
+LOAD	
+	[qOp],
+	[qPath],
+	[qValue],
+	'$(vcont)|'&[__FK_patches] AS [__KEY_chartData]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_patches]);
+
+
+[chartData]:
+LOAD	
+	[appId_u0] AS [appId_u0],
+	[groupStates_u0] AS [groupStates_u0],
+	[heightPx_u0] AS [heightPx_u0],
+	[objectId],
+	[outDpi],
+	[outZoom],
+	[sheetId_u0] AS [sheetId_u0],
+	[widthPx_u0] AS [widthPx_u0],
+	'$(vcont)|'&[__KEY_chartData] as [__KEY_chartData],
+	'$(vcont)|'&[__FK_chartData] AS [__KEY_templates]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_chartData]);
+
+
+[persistentBookmark]:
+LOAD	
+	[id],
+	'$(vcont)|'&[__FK_persistentBookmark] AS [__KEY_excelData]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_persistentBookmark]);
+
+
+[excelData]:
+LOAD	[appId_u1] AS [appId_u1],
+	[name_u1] AS [name_u1],
+	[selectionType],
+	[templateId],
+	'$(vcont)|'&[__KEY_excelData] as [__KEY_excelData],
+	'$(vcont)|'&[__FK_excelData] AS [__KEY_templates]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_excelData]);
+
+
+[templates]:
+LOAD	[excelData],
+	[subType],
+	[type],
+	[multiSheetData],
+	[fileName],
+	$(vDataHora([fileTimeStamp])) as [fileTimeStamp],
+	'$(vcont)|'&[__KEY_templates] as [__KEY_templates],
+	'$(vcont)|'&[__FK_templates] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_templates]);
+
+
+[transportChannels]:
+LOAD	[@Value_u5] AS [@Value_u5],
+	'$(vcont)|'&[__FK_transportChannels] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_transportChannels]);
+
+
+[self_u0]:
+LOAD	[href_u1] AS [href_u1],
+	'$(vcont)|'&[__FK_self_u0] AS [__KEY_links_u0]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_self_u0]);
+
+
+[links_u0]:
+LOAD	'$(vcont)|'&[__KEY_links_u0] as [__KEY_links_u0],
+	'$(vcont)|'&[__FK_links_u0] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_links_u0]);
+
+
+[selectionErrors]:
+LOAD	[@Value_u6] AS [@Value_u6],
+	'$(vcont)|'&[__FK_selectionErrors] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_selectionErrors]);
+
+
+[emailContent]:
+LOAD	[body],
+	[subject],
+	'$(vcont)|'&[__FK_emailContent] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_emailContent]);
+
+
+[recurrence_u0]:
+LOAD	[@Value_u7] AS [@Value_u7],
+	'$(vcont)|'&[__FK_recurrence_u0] AS [__KEY_trigger]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_recurrence_u0]);
+
+map_executeOnAppReload:
+Mapping
+Load
+	'$(vcont)|'&[__FK_trigger] as de_map_executeOnAppReload,
+    executeOnAppReload as para_executeOnAppReload
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_trigger]);     
+
+[trigger]:
+LOAD	
+	[chronosJobID_u0] AS [chronosJobID_u0],
+	//[executeOnAppReload],
+	[recurrence],
+	'$(vcont)|'&[__KEY_trigger] as [__KEY_trigger],
+	'$(vcont)|'&[__FK_trigger] AS [__KEY_sharingTasks]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_trigger]);
+
+
+[sharingTasks]:
+LOAD	
+	id_u0&'|'&traceid as id_event,
+	[appId_u2] AS [appId_u2],
+	[appName],
+	[createdBy],
+	$(vDataHora([dateCreated])) as [dateCreated],
+	[emailContent],
+	[enabledBySystem_u0] AS [enabledBySystem_u0],
+	[id_u0] AS [id_u0],
+    //ApplyMap('MAP_ERRO_TO_IGNORE',[id_u0]&'|'&num(Floor($(vDataHora([lastRun])))),0) as flag_error_ignore,
+	$(vDataHora([lastExecutionDate])) as [lastExecutionDate],
+	$(vDataHora([lastRun])) as [lastRun],
+	$(vDataHora([lastUpdated])) as [lastUpdated],
+	[name_u2] AS [name_u2],
+	[owner],
+	[ownerName],
+	$(vDataHora([startTime])) as [startTime],
+	[statusCode],
+	[subType_u0] AS [subType_u0],
+	[tenant],
+	[type_u0] AS [type_u0],
+	[updatedBy],
+	[latestExecutionFilesURL],
+	[latestExecutionURL],
+	[enabledByUser_u0] AS [enabledByUser_u0],
+	[insightDirectURL],
+	[insightFallbackURL],
+	[insightID_u0] AS [insightID_u0],
+	[multiInsightURLs],
+	[description],
+	Coalesce([enabled_u0],'False') AS [enabled_u0],
+	[distributionListId],
+	[failedExecutionsCount],
+	[spaceId],
+	[templateId_u0] AS [templateId_u0],
+    //ApplyMap('map_executeOnAppReload','$(vcont)|'&[__KEY_sharingTasks],'False') as executeOnAppReload,  
+	'$(vcont)|'&[__KEY_sharingTasks] as [__KEY_sharingTasks]//,
+	//[__FK_sharingTasks] AS [__KEY_root]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_sharingTasks]);
+
+
+[root]:
+LOAD	[currentPageCount],
+	[totalCount],
+	[__KEY_root]
+RESIDENT RestConnectorMasterTable 
+WHERE NOT IsNull([__KEY_root]);
+
+
+
+let vcont = vcont+1;
+let vnext = Peek('href',0,'next');
+drop Table [next];
+DROP TABLE RestConnectorMasterTable;
+
+else
+	DisConnect;
+	Sleep 3000;
+    LIB CONNECT TO '$(vMinhaConexao)';
+    trace RECONECTANDO SESSION APP;
+end if
+
+Loop while len('$(vnext)') >0;
+
+
+
+Exit Script;

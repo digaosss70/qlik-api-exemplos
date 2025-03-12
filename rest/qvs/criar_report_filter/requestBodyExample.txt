@@ -1,0 +1,45 @@
+{
+		"name":"Filter sampdle",
+		"filterType":"REP",
+		"filterV1_0": {
+			"fieldsByState": {
+				"$":[
+				{
+				"name": "Country",
+				"values": [{
+					"valueType": "string",
+					"valueAsText": "1-Argentina"
+				},{
+					"valueType": "string",
+					"valueAsText": "4-Brazil"
+				},{
+					"valueType": "string",
+					"valueAsText": "ff"
+				}
+						],
+				"overrideValues": false,
+				"selectExcluded": false
+			},{
+				"name": "Order number",
+				"values": [{
+					"valueType": "number",
+					"valueAsText": "1",
+					"valueAsNumber":1
+				},{
+					"valueType": "number",
+					"valueAsText": "61300",
+					"valueAsNumber":61300
+				},{
+					"valueType": "string",
+					"valueAsText": "ts"
+				}
+						],
+				"overrideValues": false,
+				"selectExcluded": false
+			}
+				]
+			}
+		},
+		"description": "nossa que doido",
+		"filterVersion": "filter-1.0"
+}

@@ -1,0 +1,97 @@
+///$tab Listar alocacao licencas
+let vMinhaConexao = 'NOME_SPACO:NOME_CONEXAO';
+let vMeuHost = 'meu-host.us.qlikcloud.com';
+
+LIB CONNECT TO '$(vMinhaConexao)';
+
+Load * Inline [
+id
+apace_id_01asdfadsfa
+apace_id_02fasdfasdfasd
+apace_id_03fasdfadfsadsfasd
+];
+
+
+for Each vSpaces in FieldValueList('id')
+
+
+let vnext ='https://$(vMeuHost)/api/v1/spaces/' & '$(vSpaces)' & '/assignments?limit=100';
+Trace  $(vnext);
+
+let vcont = 1;
+
+DO
+Trace $(vnext);
+RestConnectorMasterTable:
+SQL SELECT 
+	"__KEY_root",
+	(SELECT 
+		"id",
+		"type",
+		"assigneeId",
+		"createdAt",
+		"createdBy",
+		"updatedAt",
+		"updatedBy",
+		"__KEY_data",
+		"__FK_data",
+		(SELECT 
+			"@Value",
+			"__FK_roles"
+		FROM "roles" FK "__FK_roles" ArrayValueAlias "@Value")
+	FROM "data" PK "__KEY_data" FK "__FK_data"),
+	(SELECT 
+		"__FK_links_u0",
+		"__KEY_links_u0",
+		(SELECT 
+			"href" AS "href_u2",
+			"__FK_next"
+		FROM "next" FK "__FK_next")
+	FROM "links" PK "__KEY_links_u0" FK "__FK_links_u0")
+FROM JSON (wrap on) "root" PK "__KEY_root"
+WITH CONNECTION(
+Url "$(vnext)"
+)
+;
+
+[roles]:
+LOAD	
+	[@Value] as role_user_space,
+	'$(vSpaces)'&'|'&'$(vcont)'&'|'&[__FK_roles] AS [__KEY_data]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_roles]);
+
+
+[ALOCADOS]:
+LOAD	
+	[id] AS alocacoId,
+	[type] as tipo_pessoa,
+    [type]&'|'&[assigneeId] as chave_Pessoa,
+	[assigneeId] as pessoaId,
+    '$(vSpaces)' as id,
+	[createdAt] as [createdAt_assig],
+	[createdBy] as [createdBy_assig],
+	[updatedAt] as [updatedAt_assig],
+	[updatedBy] as [updatedBy_assig],
+	'$(vSpaces)'&'|'&'$(vcont)'&'|'&[__KEY_data] as [__KEY_data]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_data]);
+
+
+[next]:
+LOAD	[href_u2] AS [href_u2],
+	[__FK_next] AS [__KEY_links_u0]
+RESIDENT RestConnectorMasterTable
+WHERE NOT IsNull([__FK_next]);
+
+
+let vcont = vcont+1;
+let vnext = Peek('href_u2',0,'next');
+drop Table [next];
+DROP TABLE RestConnectorMasterTable;
+
+
+Loop while len('$(vnext)') >0;
+
+next
+

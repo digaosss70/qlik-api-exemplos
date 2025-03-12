@@ -1,0 +1,112 @@
+///$tab Listar_Aberturas_Apps
+let vMinhaConexao = 'NOME_SPACO:NOME_CONEXAO';
+let vMeuHost = 'meu-host.us.qlikcloud.com';
+
+let vDataExtractD1 = date(Now()-1/24*3,'YYYY-MM-DD');
+
+Set ErrorMode = 0;
+
+
+LIB CONNECT TO '$(vMinhaConexao)';
+
+let vnext ='https://$(vMeuHost)/api/v1/audits?eventTime=$(vDataExtractD1)T00:00:00.00Z/$(vDataExtractD1)T23:59:59.99Z&eventType=com.qlik.v1.app.opened&limit=100';
+let vcont = 1;
+
+DO
+//Trace $(vnext);
+RestConnectorMasterTable:
+SQL SELECT 
+	"__KEY_root",
+	(SELECT 
+		"eventId",
+		"eventTime",
+		"userId",
+		"__KEY_data",
+		"__FK_data",
+		(SELECT 
+			"id",
+			"__FK_data_u0"
+		FROM "data" FK "__FK_data_u0"),
+		(SELECT 
+			"spaceId",
+			"topLevelResourceId",
+			"ownerId",
+			"__KEY_extensions",
+			"__FK_extensions"
+		FROM "extensions" PK "__KEY_extensions" FK "__FK_extensions")
+	FROM "data" PK "__KEY_data" FK "__FK_data"),
+	(SELECT 
+		"__FK_links_u0",
+		"__KEY_links_u0",
+		(SELECT 
+			"href" AS "href_u1",
+			"__FK_next"
+		FROM "next" FK "__FK_next")
+	FROM "links" PK "__KEY_links_u0" FK "__FK_links_u0")
+FROM JSON (wrap on) "root" PK "__KEY_root"
+WITH CONNECTION(
+Url "$(vnext)"
+)
+;
+
+
+if NoOfRows('RestConnectorMasterTable') > 0  then
+
+  [next]:
+  LOAD	[href_u1] AS [href_u1]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_next]);
+
+  Concatenate( [App Open] )
+  LOAD	
+      [id] as [Id App],
+      1 as __FlagAppAberto,
+      '$(vcont)'&'|'&[__FK_data_u0] AS [__KEY_data]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_data_u0]);
+
+  Concatenate([Space Base])
+  LOAD	
+      [spaceId] as [Space Id],
+      [topLevelResourceId],
+      //[ownerId],
+      [__KEY_extensions],
+      '$(vcont)'&'|'&[__FK_extensions] AS [__KEY_data]
+  RESIDENT RestConnectorMasterTable
+  WHERE NOT IsNull([__FK_extensions]);
+
+  Concatenate( [User Base] )
+  LOAD	
+      [eventId],
+      $(vDataHora2([eventTime])) as [Data Hora Abertura],
+      [userId] as [UserId],
+      '$(vcont)'&'|'&[__KEY_data] AS [__KEY_data]
+  RESIDENT RestConnectorMasterTable
+  WHERE 
+  	NOT IsNull([__FK_data]) and 
+    not Exists(eventIdArchive,eventId) AND
+    NOT Exists(eventIdArchiveAPI,eventId)
+    ;
+
+
+  let vcont = vcont+1;
+  let vnext = Peek('href_u1',0,'next');
+
+  
+  drop Table [next];
+  DROP TABLE RestConnectorMasterTable;
+  
+  
+else
+	DisConnect;
+	Sleep 3000;
+    LIB CONNECT TO '$(vMinhaConexao)';
+    trace RECONECTANDO SESSION APP;
+end if
+
+
+Loop while len('$(vnext)') > 0 ;
+
+//Exit Script;
+Set ErrorMode = 1;
+

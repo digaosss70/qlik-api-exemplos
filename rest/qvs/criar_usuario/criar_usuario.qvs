@@ -1,0 +1,18 @@
+///$tab criar usuario
+let vMinhaConexao = 'NOME_SPACO:NOME_CONEXAO';
+let vMeuHost = 'meu-host.us.qlikcloud.com';
+
+LIB CONNECT TO '$(vMinhaConexao)';
+
+
+let vRequestBody = '{"name":"nome do usuario","subject":"XPTO","tenantId":"H2rsu909QHSixursyTFb3w7UA_d0iy1y","assignedRoles":[{"id":"6s580bs40a35ed8ab7f107a"}]}';
+let vRequestBody = replace(vRequestBody,'"', chr(34)&chr(34));
+
+
+RestConnectorMasterTable:
+SQL SELECT "id","name","email","subject"
+FROM JSON (wrap on) "root"
+WITH CONNECTION (BODY "$(vRequestBody)")
+;
+
+Exit Script;

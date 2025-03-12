@@ -1,0 +1,1 @@
+{"name":"John Smith1","email":"john1.smith@corp.example","subject":"XPTO","tenantId":"DSFSDFAuD09QHSixsdfTFb3w7UA_d0i123","assignedRoles":[{"id":"585750f750afab80bd5359dsf"}]}

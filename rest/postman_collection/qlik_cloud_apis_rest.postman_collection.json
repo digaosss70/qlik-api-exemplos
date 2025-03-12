@@ -1,0 +1,694 @@
+{
+	"info": {
+		"_postman_id": "20093b89-fd58-4345-9f38-4bfa7d7f0345",
+		"name": "qlik_cloud_apis_rest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8324846",
+		"_collection_link": "https://cloudy-station-515653.postman.co/workspace/saas_sg~cff565a0-d23a-44b9-a9cb-614119329e08/collection/8324846-20093b89-fd58-4345-9f38-4bfa7d7f0345?action=share&source=collection_link&creator=8324846"
+	},
+	"item": [
+		{
+			"name": "alterar_email",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"op\":\"replace\",\"path\":\"/email\",\"value\":\"Sachin.Tate@saint-gobain.com\"}]"
+				},
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users/<SEU_QLIK_CLOUD_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"<SEU_QLIK_CLOUD_ID>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users/<USER_QLIK_CLOUD_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"<USER_QLIK_CLOUD_ID>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users?limit=10&sort=lastUpdatedAt",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "fields",
+							"value": "id,name,lastUpdated,assignedGroups",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "lastUpdatedAt"
+						},
+						{
+							"key": "filter",
+							"value": "name gt \"2024\"",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user me",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users/me",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete Filters",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users/me",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get reloads",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/reloads?limit=100&appId=<APP_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"reloads"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "appId",
+							"value": "<APP_ID>"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get sharing task by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/sharing-tasks/<REPORT_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sharing-tasks",
+						"<REPORT_ID>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "execute sharing task by id",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sharingTaskID\": \"<REPORT_ID>\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/sharing-tasks/actions/execute",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"sharing-tasks",
+						"actions",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get item by type and name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/items?resourceType=dataset&limit=100&query=parametros.xlsx&spaceId=<SPACE_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"items"
+					],
+					"query": [
+						{
+							"key": "resourceType",
+							"value": "dataset"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "query",
+							"value": "parametros.xlsx"
+						},
+						{
+							"key": "spaceId",
+							"value": "<SPACE_ID>"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get connection id by space",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/data-files/connections?spaceId=<SPACE_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"data-files",
+						"connections"
+					],
+					"query": [
+						{
+							"key": "spaceId",
+							"value": "<SPACE_ID>"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get space by name",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/spaces?filter=NAME eq \"POC_QLIK-CLI\"",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"spaces"
+					],
+					"query": [
+						{
+							"key": "filter",
+							"value": "NAME eq \"POC_QLIK-CLI\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post reload",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users/me",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ls user with filter",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/users?limit=100&filter=status eq \"active\"",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "100"
+						},
+						{
+							"key": "filter",
+							"value": "status eq \"active\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateFile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `\r",
+							"<style type=\"text/css\">\r",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+							"    .tftable tr {background-color:#ffffff;}\r",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+							"    .tftable tr:hover {background-color:#e0ffff;}\r",
+							"</style>\r",
+							"\r",
+							"<table class=\"tftable\" border=\"1\">\r",
+							"    <tr>\r",
+							"        <th>ID</th>\r",
+							"        <th>Name</th>\r",
+							"        <th>Size</th>\r",
+							"        <th>Created Date</th>\r",
+							"        <th>Modified Date</th>\r",
+							"        <th>Space ID</th>\r",
+							"        <th>Owner ID</th>\r",
+							"    </tr>\r",
+							"    \r",
+							"    <tr>\r",
+							"        <td>{{response.id}}</td>\r",
+							"        <td>{{response.name}}</td>\r",
+							"        <td>{{response.size}}</td>\r",
+							"        <td>{{response.createdDate}}</td>\r",
+							"        <td>{{response.modifiedDate}}</td>\r",
+							"        <td>{{response.spaceId}}</td>\r",
+							"        <td>{{response.ownerId}}</td>\r",
+							"    </tr>\r",
+							"</table>\r",
+							"`;\r",
+							"\r",
+							"function constructVisualizerPayload() {\r",
+							"    return { response: pm.response.json() }\r",
+							"}\r",
+							"\r",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"strictSSL": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Files",
+							"contentType": "",
+							"type": "file",
+							"src": "y9N3FdSk_/Transactions1.qvd"
+						},
+						{
+							"key": "json",
+							"value": "{\"connectionId\":\"<CONNECTION_ID>\"}",
+							"contentType": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/data-files/<CONNECTION_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"data-files",
+						"<CONNECTION_ID>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "temp-content",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "470FcHzxP/arquivo.xlsx"
+					}
+				},
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/temp-contents?filename=arquivo.xlsx&ttl=200",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"temp-contents"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "arquivo.xlsx"
+						},
+						{
+							"key": "ttl",
+							"value": "200"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get automation run",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer <SUA_QLIK_CLOUD_API_KEY>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/automations/<ID>/runs/<ID_>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"automations",
+						"<ID>",
+						"runs",
+						"<ID_>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post automation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://QLIK_CLOUD_HOST.us.qlikcloud.com/api/v1/automations/<AUTOMATION_ID>/actions/execute?X-Execution-Token=<TOKEN_AUTOMATION_ID>",
+					"protocol": "https",
+					"host": [
+						"QLIK_CLOUD_HOST",
+						"us",
+						"qlikcloud",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"automations",
+						"<AUTOMATION_ID>",
+						"actions",
+						"execute"
+					],
+					"query": [
+						{
+							"key": "X-Execution-Token",
+							"value": "<TOKEN_AUTOMATION_ID>"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
