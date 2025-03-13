@@ -1,0 +1,3 @@
+https://pypi.org/project/qlik-sdk/
+
+https://qlik.dev/toolkits/platform-sdk/
