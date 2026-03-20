@@ -1,0 +1,3 @@
+qlik-sdk==0.17.0
+load_dotenv
+requests
