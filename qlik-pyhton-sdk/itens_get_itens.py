@@ -12,4 +12,4 @@ QLIK_APP_ID = os.getenv("app_id")
 
 auth = Qlik(Config(host=QLIK_HIOST, auth_type=AuthType.APIKey, api_key=QLIK_API_KEY))
 
-lista_de_apps = auth.items.get_items(resourceType='app', limit=1,name=f)
+lista_de_apps = auth.items.get_items(resourceType='app', limit=100)
